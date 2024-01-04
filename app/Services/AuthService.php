@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Events\ForgotPassword;
 use App\Events\UserRegistered;
 use App\Exceptions\LoginInvalidException;
 use App\Exceptions\UserHasBeenTakenException;
@@ -10,6 +11,7 @@ use App\Http\Resources\UserResource;
 use App\Models\PasswordReset;
 use App\Models\User;
 use Illuminate\Support\Str;
+use Mockery\Generator\StringManipulation\Pass\Pass;
 
 class AuthService
 {
@@ -72,10 +74,20 @@ class AuthService
     {
         $user = User::where('email', $email)->firstOrFail();
 
-        PasswordReset::create([
-            'email' => $user->email,
-            'token' => Str::random(60)
-        ]);
+        $token = Str::random(60);
+
+        if(!empty($user)){
+            PasswordReset::where('email', $email)->update([
+                'token' => Str::random(60)
+            ]);
+        }else{
+            PasswordReset::create([
+                'email' => $user->email,
+                'token' => Str::random(60)
+            ]);
+        }
+
+        event(new ForgotPassword($user, $token));
 
         return '';
     }
