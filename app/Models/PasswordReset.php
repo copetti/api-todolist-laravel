@@ -9,6 +9,8 @@ class PasswordReset extends Model
 {
     use HasFactory;
 
+    public $table = 'password_reset_tokens';
+
     const UPDATED_AT = null;
 
     protected $fillable = [

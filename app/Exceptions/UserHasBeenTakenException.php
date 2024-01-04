@@ -6,7 +6,7 @@ use Exception;
 
 class UserHasBeenTakenException extends Exception
 {
-    protected $message = 'User has been taken';
+    protected $message = 'This User has been taken';
     public function render()
     {
         return response()->json([
