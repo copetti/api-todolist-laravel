@@ -43,9 +43,8 @@ class ForgotPasswordMail extends Mailable
         return new Content(
             view: 'emails.forgot_password',
             with: [
-                'resetPasswordLink' => config('app.url') . '/recovery-password?token='. $this->token
+                'resetPasswordLink' => config('app.url') . '/reset-password?token='. $this->token
             ]
-
         );
     }
 
